@@ -6,7 +6,7 @@ interface AnswerProps {
   questionId: string,
 }
 
-export class Anwser {
+export class Answer {
   public id: string
   public content: string
   public authorId: string
