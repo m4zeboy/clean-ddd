@@ -3,6 +3,7 @@ import { Answer } from '@/domain/forum/enterprise/entities/answer'
 
 export class InMemoryAnswersRepository implements AnswersRepository {
   public items: Answer[] = []
+
   async findById(id: string): Promise<Answer | null> {
     const item = this.items.find((item) => item.id.toString() === id)
     if (!item) return null
@@ -17,5 +18,10 @@ export class InMemoryAnswersRepository implements AnswersRepository {
     const itemIndex = this.items.findIndex((item) => item.id === answer.id)
 
     this.items.splice(itemIndex, 1)
+  }
+
+  async save(answer: Answer): Promise<void> {
+    const itemIndex = this.items.findIndex((item) => item.id === answer.id)
+    this.items[itemIndex] = answer
   }
 }
