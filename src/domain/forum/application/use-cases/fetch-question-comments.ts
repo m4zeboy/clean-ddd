@@ -1,15 +1,20 @@
+import { Either, failure, success } from '@/core/either'
 import { QuestionComment } from '../../enterprise/entities/question-comment'
 import { QuestionCommentsRepository } from '../repositories/question-comments-repository'
 import { QuestionsRepository } from '../repositories/questions-repository'
+import { ResourceNotFoundError } from './errors/resource-not-found'
 
 interface FetchQuestionCommentsUseCaseRequest {
   page: number
   questionId: string
 }
 
-interface FetchQuestionCommentsUseCaseResponse {
-  questionComments: QuestionComment[]
-}
+type FetchQuestionCommentsUseCaseResponse = Either<
+  ResourceNotFoundError,
+  {
+    questionComments: QuestionComment[]
+  }
+>
 
 export class FetchQuestionCommentsUseCase {
   constructor(
@@ -23,7 +28,7 @@ export class FetchQuestionCommentsUseCase {
   }: FetchQuestionCommentsUseCaseRequest): Promise<FetchQuestionCommentsUseCaseResponse> {
     const question = await this.questionsRepository.findById(questionId)
     if (!question) {
-      throw new Error('Question not found')
+      return failure(new ResourceNotFoundError())
     }
 
     const questionComments =
@@ -31,6 +36,6 @@ export class FetchQuestionCommentsUseCase {
         { page },
         questionId,
       )
-    return { questionComments }
+    return success({ questionComments })
   }
 }

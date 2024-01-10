@@ -11,7 +11,7 @@ describe('Fetch Recent Answers', () => {
     inMemoryAnswersRepository = new InMemoryAnswersRepository()
     sut = new FetchQuestionAnswersUseCase(inMemoryAnswersRepository)
   })
-  it('shoud be able to fetch question answers', async () => {
+  it('should be able to fetch question answers', async () => {
     await inMemoryAnswersRepository.create(
       makeAnswer({ questionId: new UniqueEntityID('question-1') }),
     )
@@ -19,20 +19,22 @@ describe('Fetch Recent Answers', () => {
       makeAnswer({ questionId: new UniqueEntityID('question-2') }),
     )
 
-    const { answers } = await sut.execute({ page: 1, questionId: 'question-1' })
+    const result = await sut.execute({ page: 1, questionId: 'question-1' })
 
-    expect(answers).toHaveLength(1)
+    expect(result.isSuccess()).toBeTruthy()
+    expect(result.value?.answers).toHaveLength(1)
   })
 
-  it('shoud be able to fetch paginated question answers', async () => {
+  it('should be able to fetch paginated question answers', async () => {
     for (let i = 1; i <= 22; i++) {
       await inMemoryAnswersRepository.create(
         makeAnswer({ questionId: new UniqueEntityID('question-1') }),
       )
     }
 
-    const { answers } = await sut.execute({ page: 2, questionId: 'question-1' })
+    const result = await sut.execute({ page: 2, questionId: 'question-1' })
+    expect(result.isSuccess()).toBeTruthy()
 
-    expect(answers).toHaveLength(2)
+    expect(result.value?.answers).toHaveLength(2)
   })
 })

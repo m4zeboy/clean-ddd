@@ -16,20 +16,20 @@ describe('comment on answer', () => {
       inMemoryAnswerCommentsRepository,
     )
   })
-  it('shoud be able to comment on answer', async () => {
+  it('should be able to comment on answer', async () => {
     const answer = makeAnswer()
 
     await inMemoryAnswersRepository.create(answer)
 
-    const { answerComment } = await sut.execute({
+    const result = await sut.execute({
       authorId: '1',
       answerId: answer.id.toString(),
       content: 'comment example',
     })
 
-    expect(answerComment.id).toBeTruthy()
-    expect(inMemoryAnswerCommentsRepository.items[0].id).toEqual(
-      answerComment.id,
+    expect(result.isSuccess()).toBe(true)
+    expect(inMemoryAnswerCommentsRepository.items[0]).toEqual(
+      result.value?.answerComment,
     )
   })
 })

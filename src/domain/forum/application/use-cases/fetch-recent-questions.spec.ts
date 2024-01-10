@@ -10,7 +10,7 @@ describe('Fetch Recent Questions', () => {
     inMemoryQuestionsRepository = new InMemoryQuestionsRepository()
     sut = new FetchRecentQuestionsUseCase(inMemoryQuestionsRepository)
   })
-  it('shoud be able to fetch recent questions', async () => {
+  it('should be able to fetch recent questions', async () => {
     await inMemoryQuestionsRepository.create(
       makeQuestion({
         createdAt: new Date(2022, 0, 20),
@@ -29,22 +29,22 @@ describe('Fetch Recent Questions', () => {
       }),
     )
 
-    const { questions } = await sut.execute({ page: 1 })
+    const result = await sut.execute({ page: 1 })
 
-    expect(questions).toEqual([
+    expect(result.value?.questions).toEqual([
       expect.objectContaining({ createdAt: new Date(2022, 0, 23) }),
       expect.objectContaining({ createdAt: new Date(2022, 0, 20) }),
       expect.objectContaining({ createdAt: new Date(2022, 0, 18) }),
     ])
   })
 
-  it('shoud be able to fetch paginated recent questions', async () => {
+  it('should be able to fetch paginated recent questions', async () => {
     for (let i = 1; i <= 22; i++) {
       await inMemoryQuestionsRepository.create(makeQuestion())
     }
 
-    const { questions } = await sut.execute({ page: 2 })
+    const result = await sut.execute({ page: 2 })
 
-    expect(questions).toHaveLength(2)
+    expect(result.value?.questions).toHaveLength(2)
   })
 })

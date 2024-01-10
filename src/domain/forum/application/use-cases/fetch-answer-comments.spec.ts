@@ -17,7 +17,7 @@ describe('Fetch Answer Comments', () => {
       inMemoryAnswerCommentsRepository,
     )
   })
-  it('shoud be able to fetch answer comments', async () => {
+  it('should be able to fetch answer comments', async () => {
     const answer = makeAnswer()
     await inMemoryAnswersRepository.create(answer)
 
@@ -38,14 +38,15 @@ describe('Fetch Answer Comments', () => {
       }),
     )
 
-    const { answerComments } = await sut.execute({
+    const { isFailure, isSuccess, value } = await sut.execute({
       page: 1,
       answerId: answer.id.toString(),
     })
-    expect(answerComments).toHaveLength(3)
+    expect(isSuccess()).toBeTruthy()
+    expect(value?.answerComments).toHaveLength(3)
   })
 
-  it('shoud be able to fetch paginated answer comments', async () => {
+  it('should be able to fetch paginated answer comments', async () => {
     const answer = makeAnswer()
     await inMemoryAnswersRepository.create(answer)
     for (let i = 1; i <= 22; i++) {
@@ -56,11 +57,11 @@ describe('Fetch Answer Comments', () => {
       )
     }
 
-    const { answerComments } = await sut.execute({
+    const { isSuccess, value } = await sut.execute({
       page: 2,
       answerId: answer.id.toString(),
     })
-
-    expect(answerComments).toHaveLength(2)
+    expect(isSuccess()).toBeTruthy()
+    expect(value?.answerComments).toHaveLength(2)
   })
 })
