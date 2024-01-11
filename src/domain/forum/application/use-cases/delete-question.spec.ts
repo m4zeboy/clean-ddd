@@ -3,13 +3,17 @@ import { DeleteQuestionUseCase } from './delete-question'
 import { makeQuestion } from 'test/factories/make-question'
 import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 import { NotAllowedError } from './errors/not-allowed'
+import { InMemoryQuestionAttachmentsRepository } from 'test/repositories/question-attachments'
+import { makeQuestionAttachment } from 'test/factories/make-question-attachment'
 
 let inMemoryQuestionsRepository: InMemoryQuestionsRepository
+let inMemoryQuestionAttachmentsRepository: InMemoryQuestionAttachmentsRepository
 let sut: DeleteQuestionUseCase
 
 describe('Delete Question Question', () => {
   beforeEach(() => {
-    inMemoryQuestionsRepository = new InMemoryQuestionsRepository()
+    inMemoryQuestionAttachmentsRepository = new InMemoryQuestionAttachmentsRepository()
+    inMemoryQuestionsRepository = new InMemoryQuestionsRepository(inMemoryQuestionAttachmentsRepository)
     sut = new DeleteQuestionUseCase(inMemoryQuestionsRepository)
   })
   it('should be able to delete a question', async () => {
@@ -20,6 +24,19 @@ describe('Delete Question Question', () => {
 
     await inMemoryQuestionsRepository.create(question)
 
+    inMemoryQuestionAttachmentsRepository.items.push(
+      makeQuestionAttachment({
+        questionId: question.id,
+        attachmentId: new UniqueEntityID('1'),
+      }),
+    )
+    inMemoryQuestionAttachmentsRepository.items.push(
+      makeQuestionAttachment({
+        questionId: question.id,
+        attachmentId: new UniqueEntityID('2'),
+      }),
+    )
+
     const result = await sut.execute({
       questionId: 'question-1',
       authorId: 'author-1',
@@ -27,6 +44,7 @@ describe('Delete Question Question', () => {
 
     expect(result.isSuccess()).toBe(true)
     expect(inMemoryQuestionsRepository.items).toHaveLength(0)
+    expect(await inMemoryQuestionAttachmentsRepository.findManyByQuestionId(question.id.toString())).toHaveLength(0)
   })
 
   it('should not be able to delete a question from another user ', async () => {

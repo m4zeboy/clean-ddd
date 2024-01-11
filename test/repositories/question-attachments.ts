@@ -5,6 +5,11 @@ export class InMemoryQuestionAttachmentsRepository
   implements QuestionAttachmentsRepository {
   public items: QuestionAttachment[] = []
 
+  
+  async deleteManyByQuestionId(questionId: string): Promise<void> {
+    this.items = this.items.filter(item => item.questionId.toString() !== questionId)
+  }
+
   async findManyByQuestionId(questionId: string) {
     const questionAttachments = this.items.filter(
       (item) => item.questionId.toString() === questionId,
