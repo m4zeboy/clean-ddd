@@ -3,7 +3,9 @@ import { InMemoryQuestionCommentsRepository } from 'test/repositories/question-c
 import { InMemoryQuestionsRepository } from 'test/repositories/questions'
 import { makeQuestion } from 'test/factories/make-question'
 import { makeQuestionComment } from 'test/factories/make-question-comment'
+import { InMemoryQuestionAttachmentsRepository } from 'test/repositories/question-attachments'
 
+let inMemoryQuestionAttachmentsRepository: InMemoryQuestionAttachmentsRepository
 let inMemoryQuestionCommentsRepository: InMemoryQuestionCommentsRepository
 let inMemoryQuestionsRepository: InMemoryQuestionsRepository
 let sut: FetchQuestionCommentsUseCase
@@ -12,7 +14,7 @@ describe('Fetch Question Comments', () => {
   beforeEach(() => {
     inMemoryQuestionCommentsRepository =
       new InMemoryQuestionCommentsRepository()
-    inMemoryQuestionsRepository = new InMemoryQuestionsRepository()
+    inMemoryQuestionsRepository = new InMemoryQuestionsRepository(inMemoryQuestionAttachmentsRepository)
     sut = new FetchQuestionCommentsUseCase(
       inMemoryQuestionsRepository,
       inMemoryQuestionCommentsRepository,

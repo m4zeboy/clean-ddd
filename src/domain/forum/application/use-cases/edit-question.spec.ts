@@ -54,6 +54,7 @@ describe('Edit Question Question', () => {
       title: 'Title edited',
       content: 'Content Edited',
     })
+    
     expect(
       inMemoryQuestionsRepository.items[0].attachments.currentItems,
     ).toHaveLength(2)
