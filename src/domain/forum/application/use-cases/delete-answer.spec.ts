@@ -2,7 +2,7 @@ import { InMemoryAnswersRepository } from 'test/repositories/answers'
 import { DeleteAnswerUseCase } from './delete-answer'
 import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 import { makeAnswer } from 'test/factories/make-answer'
-import { NotAllowedError } from './errors/not-allowed'
+import { NotAllowedError } from '@/core/errors/errors/not-allowed'
 import { InMemoryAnswerAttachmentsRepository } from 'test/repositories/answer-attachments'
 import { makeAnswerAttachment } from 'test/factories/make-answer-attachment'
 
@@ -12,8 +12,11 @@ let sut: DeleteAnswerUseCase
 
 describe('Delete Answer Answer', () => {
   beforeEach(() => {
-    inMemoryAnswerAttachmentsRepository = new InMemoryAnswerAttachmentsRepository()
-    inMemoryAnswersRepository = new InMemoryAnswersRepository(inMemoryAnswerAttachmentsRepository)
+    inMemoryAnswerAttachmentsRepository =
+      new InMemoryAnswerAttachmentsRepository()
+    inMemoryAnswersRepository = new InMemoryAnswersRepository(
+      inMemoryAnswerAttachmentsRepository,
+    )
     sut = new DeleteAnswerUseCase(inMemoryAnswersRepository)
   })
   it('should be able to delete a answer', async () => {
@@ -36,7 +39,6 @@ describe('Delete Answer Answer', () => {
         attachmentId: new UniqueEntityID('2'),
       }),
     )
-      
 
     await sut.execute({ answerId: 'answer-1', authorId: 'author-1' })
 

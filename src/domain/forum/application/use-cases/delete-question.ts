@@ -1,7 +1,7 @@
 import { Either, failure, success } from '@/core/either'
 import { QuestionsRepository } from '../repositories/questions-repository'
-import { ResourceNotFoundError } from './errors/resource-not-found'
-import { NotAllowedError } from './errors/not-allowed'
+import { ResourceNotFoundError } from '@/core/errors/errors/resource-not-found'
+import { NotAllowedError } from '@/core/errors/errors/not-allowed'
 
 interface DeleteQuestionUseCaseRequest {
   questionId: string
@@ -14,7 +14,7 @@ type DeleteQuestionUseCaseResponse = Either<
 >
 
 export class DeleteQuestionUseCase {
-  constructor(private questionsRepository: QuestionsRepository) { }
+  constructor(private questionsRepository: QuestionsRepository) {}
 
   async execute({
     questionId,

@@ -2,7 +2,7 @@ import { Either, failure, success } from '@/core/either'
 import { AnswerComment } from '../../enterprise/entities/answer-comment'
 import { AnswerCommentsRepository } from '../repositories/answer-comments-repository'
 import { AnswersRepository } from '../repositories/answers-repository'
-import { ResourceNotFoundError } from './errors/resource-not-found'
+import { ResourceNotFoundError } from '@/core/errors/errors/resource-not-found'
 
 interface FetchAnswerCommentsUseCaseRequest {
   page: number
@@ -20,7 +20,7 @@ export class FetchAnswerCommentsUseCase {
   constructor(
     private answersRepository: AnswersRepository,
     private answerCommentsRepository: AnswerCommentsRepository,
-  ) { }
+  ) {}
 
   async execute({
     page,

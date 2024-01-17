@@ -1,8 +1,8 @@
 import { Either, failure, success } from '@/core/either'
 import { Question } from '../../enterprise/entities/question'
 import { QuestionsRepository } from '../repositories/questions-repository'
-import { ResourceNotFoundError } from './errors/resource-not-found'
-import { NotAllowedError } from './errors/not-allowed'
+import { ResourceNotFoundError } from '@/core/errors/errors/resource-not-found'
+import { NotAllowedError } from '@/core/errors/errors/not-allowed'
 import { QuestionAttachmentsRepository } from '../repositories/question-attachments-repository'
 import { QuestionAttachmentList } from '../../enterprise/entities/question-attachment-list'
 import { UniqueEntityID } from '@/core/entities/unique-entity-id'
@@ -27,7 +27,7 @@ export class EditQuestionUseCase {
   constructor(
     private questionsRepository: QuestionsRepository,
     private questionAttachmentsRepository: QuestionAttachmentsRepository,
-  ) { }
+  ) {}
 
   async execute({
     authorId,

@@ -2,7 +2,7 @@ import { InMemoryQuestionsRepository } from 'test/repositories/questions'
 import { EditQuestionUseCase } from './edit-question'
 import { makeQuestion } from 'test/factories/make-question'
 import { UniqueEntityID } from '@/core/entities/unique-entity-id'
-import { NotAllowedError } from './errors/not-allowed'
+import { NotAllowedError } from '@/core/errors/errors/not-allowed'
 import { InMemoryQuestionAttachmentsRepository } from 'test/repositories/question-attachments'
 import { makeQuestionAttachment } from 'test/factories/make-question-attachment'
 
@@ -14,7 +14,9 @@ describe('Edit Question Question', () => {
   beforeEach(() => {
     inMemoryQuestionAttachmentsRepository =
       new InMemoryQuestionAttachmentsRepository()
-    inMemoryQuestionsRepository = new InMemoryQuestionsRepository(inMemoryQuestionAttachmentsRepository)
+    inMemoryQuestionsRepository = new InMemoryQuestionsRepository(
+      inMemoryQuestionAttachmentsRepository,
+    )
     sut = new EditQuestionUseCase(
       inMemoryQuestionsRepository,
       inMemoryQuestionAttachmentsRepository,
@@ -54,7 +56,7 @@ describe('Edit Question Question', () => {
       title: 'Title edited',
       content: 'Content Edited',
     })
-    
+
     expect(
       inMemoryQuestionsRepository.items[0].attachments.currentItems,
     ).toHaveLength(2)
