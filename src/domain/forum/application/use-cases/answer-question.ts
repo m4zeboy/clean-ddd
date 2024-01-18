@@ -20,13 +20,13 @@ type AnswerQuestionUseCaseResponse = Either<
 >
 
 export class AnswerQuestionUseCase {
-  constructor(private answersRepository: AnswersRepository) { }
+  constructor(private answersRepository: AnswersRepository) {}
 
   async execute({
     instructorId,
     questionId,
     content,
-    attachmentsIds
+    attachmentsIds,
   }: AnswerQuestionUseCaseRequest): Promise<AnswerQuestionUseCaseResponse> {
     const answer = Answer.create({
       content,
@@ -34,7 +34,6 @@ export class AnswerQuestionUseCase {
       questionId: new UniqueEntityID(questionId),
     })
 
-    
     const answerAttachments = attachmentsIds.map((attachmentId) => {
       return AnswerAttachment.create({
         attachmentId: new UniqueEntityID(attachmentId),
