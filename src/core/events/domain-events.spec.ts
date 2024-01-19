@@ -29,7 +29,7 @@ class CustomAggregate extends AggregateRoot<null> {
 }
 
 describe('domain events', () => {
-  it.only('should be able to dispatch and listen to events', () => {
+  it('should be able to dispatch and listen to events', () => {
     const callbackSpy = vi.fn()
     // Subscriber cadastrado (ouvindo evento de "Resposta criada")
     DomainEvents.register(callbackSpy, CustomAggregateCreated.name)
